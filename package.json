@@ -2,7 +2,7 @@
   "name": "react-native-preview-story",
   "version": "0.1.0",
   "description": "React Native Story Component Which takes Stories array and show exact story view like infamous instagram",
-  "source": "./src/index.tsx",
+  "source": "./src/index.ts",
   "main": "./lib/commonjs/index.js",
   "module": "./lib/module/index.js",
   "exports": {
@@ -19,6 +19,7 @@
   },
   "files": [
     "src",
+    "src/components/*",
     "lib",
     "android",
     "ios",
@@ -172,7 +173,6 @@
       [
         "typescript",
         {
-          "project": "tsconfig.build.json",
           "esm": true
         }
       ]
@@ -181,5 +181,6 @@
   "create-react-native-library": {
     "type": "library",
     "version": "0.41.0"
-  }
+  },
+  "types": "./lib/typescript/commonjs/src/index.d.ts"
 }
