@@ -1,36 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Animated,
   Dimensions,
-  Image,
   Pressable,
   SafeAreaView,
   View,
   type GestureResponderEvent,
-} from "react-native";
-import styles from "../Styled";
-import Header from "./Header";
-type IStoryProp = {
-  id: number;
-  url: string;
-  type: "image";
-  duration: number;
-  storyId: number;
-  isSeen: false;
-};
-type IStoryViewProp = {
-  onComplete: () => void;
-  stories: IStoryProp[];
-  visible?: boolean;
-  imageStyle?: any;
-  maxDuration?: number;
-  renderHeaderComponent?: () => React.ReactNode;
-  onChangePosition?: (position: number) => void;
-  storyName?: string;
-  index?: number;
-};
+} from 'react-native';
+import styles from '../Styled';
+import type { IStoryViewProp } from '../types';
+import Header from './Header';
+import ContentView from './ContentView';
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get('window');
 
 const StoryView: React.FC<IStoryViewProp> = ({
   onComplete,
@@ -39,14 +21,19 @@ const StoryView: React.FC<IStoryViewProp> = ({
   imageStyle,
   maxDuration = 3,
   renderHeaderComponent = null,
-  storyName = "Preview",
+  storyName = '',
   onChangePosition,
   index,
+  close = true,
+  playPause = true,
+  storyNameText = {},
+  headerStyle = {},
 }) => {
   const [currentStoryIndex, setCurrentStoryIndex] = useState(index || 0);
   const progressAnim = useRef(new Animated.Value(0)).current;
   const pausedProgress = useRef(0);
   const [isPaused, setIsPaused] = useState(false);
+
   const currentStory = React.useMemo(
     () => stories[currentStoryIndex],
     [currentStoryIndex, stories]
@@ -56,22 +43,6 @@ const StoryView: React.FC<IStoryViewProp> = ({
     [currentStory, maxDuration]
   );
   const [wentBack, setWentBack] = useState(0);
-
-  const renderStoryContent = (story: any) => {
-    switch (story.type) {
-      case "image":
-        return (
-          <Image
-            source={{
-              uri: story.url,
-            }}
-            style={[styles.backgroundImage, imageStyle]}
-          />
-        );
-      default:
-        return null;
-    }
-  };
 
   const goToNextStory = () => {
     if (currentStoryIndex < stories.length - 1) {
@@ -108,15 +79,15 @@ const StoryView: React.FC<IStoryViewProp> = ({
   };
   const getProgressBarWidth = (storyIndex: number, currentIndex: number) => {
     if (currentIndex > storyIndex) {
-      return "100%";
+      return '100%';
     } // this is when the Story has been viewed
     if (currentIndex === storyIndex) {
       return progressAnim.interpolate({
         inputRange: [0, 1],
-        outputRange: ["0%", "100%"], // this is when the story is being viewed
+        outputRange: ['0%', '100%'], // this is when the story is being viewed
       });
     }
-    return "0%"; // this is when the Story has not been viewed yet
+    return '0%'; // this is when the Story has not been viewed yet
   };
 
   const goToPreviousStory = () => {
@@ -167,6 +138,7 @@ const StoryView: React.FC<IStoryViewProp> = ({
   };
 
   useEffect(() => {
+    console.log('isPaused', isPaused);
     if (!isPaused) {
       runProgressAnimation();
     } else {
@@ -191,20 +163,30 @@ const StoryView: React.FC<IStoryViewProp> = ({
         ]}
       >
         <View style={styles.container}>
-          {currentStory?.type && renderStoryContent(currentStory)}
           <SafeAreaView style={styles.topBarContainer}>
-            <>{renderHeaderComponent ? renderHeaderComponent : <Header
-              getProgressBarWidth={getProgressBarWidth}
-              storyName={storyName}
-              stories={stories}
-              currentStoryIndex={currentStoryIndex}
-              pausePlay={pausePlay}
-              isPaused={isPaused}
-              onComplete={onComplete}
-            />
-            }
+            <>
+              {renderHeaderComponent ? (
+                renderHeaderComponent
+              ) : (
+                <Header
+                  getProgressBarWidth={getProgressBarWidth}
+                  storyName={storyName}
+                  stories={stories}
+                  currentStoryIndex={currentStoryIndex}
+                  pausePlay={pausePlay}
+                  isPaused={isPaused}
+                  onComplete={onComplete}
+                  close={close}
+                  playPause={playPause}
+                  storyNameText={storyNameText}
+                  headerStyle={headerStyle}
+                />
+              )}
             </>
           </SafeAreaView>
+          {currentStory?.type && (
+            <ContentView story={currentStory} imageStyle={imageStyle} />
+          )}
         </View>
       </Pressable>
     </SafeAreaView>
