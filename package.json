@@ -1,6 +1,6 @@
 {
   "name": "react-native-preview-story",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React Native Story Component Which takes Stories array and show exact story view like infamous instagram",
   "source": "./src/index.ts",
   "main": "./lib/commonjs/index.js",
