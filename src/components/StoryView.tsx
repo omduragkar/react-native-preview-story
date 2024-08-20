@@ -33,6 +33,7 @@ const StoryView: React.FC<IStoryViewProp> = ({
   const progressAnim = useRef(new Animated.Value(0)).current;
   const pausedProgress = useRef(0);
   const [isPaused, setIsPaused] = useState(false);
+  const isCompletedRef = useRef(false);
 
   const currentStory = React.useMemo(
     () => stories[currentStoryIndex],
@@ -58,7 +59,10 @@ const StoryView: React.FC<IStoryViewProp> = ({
       });
     } else {
       setWentBack(0);
-      onComplete();
+      if (!isCompletedRef.current) {
+        isCompletedRef.current = true;
+        onComplete();
+      }
       setCurrentStoryIndex(0);
       onChangePosition && onChangePosition(0);
     }
