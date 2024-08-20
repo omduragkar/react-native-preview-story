@@ -22,7 +22,7 @@ export interface IStoryViewProp extends IHeaderCommonProps {
   visible?: boolean;
   imageStyle?: any;
   maxDuration?: number;
-  renderHeaderComponent?: () => React.FC<IHeaderProps>;
+  renderHeaderComponent?: (props: IHeaderProps) => Element;
   onChangePosition?: (position: number) => void;
   index?: number;
 }

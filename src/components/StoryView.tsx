@@ -138,7 +138,6 @@ const StoryView: React.FC<IStoryViewProp> = ({
   };
 
   useEffect(() => {
-    console.log('isPaused', isPaused);
     if (!isPaused) {
       runProgressAnimation();
     } else {
@@ -166,7 +165,19 @@ const StoryView: React.FC<IStoryViewProp> = ({
           <SafeAreaView style={styles.topBarContainer}>
             <>
               {renderHeaderComponent ? (
-                renderHeaderComponent
+                renderHeaderComponent({
+                  getProgressBarWidth,
+                  storyName,
+                  stories,
+                  currentStoryIndex,
+                  pausePlay,
+                  isPaused,
+                  onComplete,
+                  close,
+                  playPause,
+                  storyNameText,
+                  headerStyle,
+                })
               ) : (
                 <Header
                   getProgressBarWidth={getProgressBarWidth}
@@ -184,9 +195,11 @@ const StoryView: React.FC<IStoryViewProp> = ({
               )}
             </>
           </SafeAreaView>
-          {currentStory?.type && (
-            <ContentView story={currentStory} imageStyle={imageStyle} />
-          )}
+          <View style={styles.imageContainer}>
+            {currentStory?.type && (
+              <ContentView story={currentStory} imageStyle={imageStyle} />
+            )}
+          </View>
         </View>
       </Pressable>
     </SafeAreaView>

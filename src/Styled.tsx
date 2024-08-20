@@ -81,5 +81,9 @@ const styles = StyleSheet.create({
   flex1: {
     flex: 1,
   },
+  imageContainer: {
+    zIndex: 0,
+    flex: 1,
+  },
 });
 export default styles;

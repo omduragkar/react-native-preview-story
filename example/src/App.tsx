@@ -1,4 +1,4 @@
-import { StoryView } from 'react-native-preview-story';
+import { Header, StoryView } from 'react-native-preview-story';
 import { SafeAreaView, Text, Button, View, StatusBar } from 'react-native';
 import styles from '../../src/Styled';
 
@@ -18,11 +18,7 @@ export default function App() {
             component: (
               <View>
                 <Text>Custom Component</Text>
-                <View
-                  style={{
-                    marginTop: 50,
-                  }}
-                >
+                <View>
                   <Button
                     title="Press Me"
                     onPress={() => console.log('Button Pressed')}
@@ -78,6 +74,7 @@ export default function App() {
         visible
         onComplete={() => console.log('onComplete')}
         close={false}
+        renderHeaderComponent={(props) => <Header {...props} />}
       />
     </SafeAreaView>
   );
