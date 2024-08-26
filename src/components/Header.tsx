@@ -25,7 +25,7 @@ const Header: React.FC<IHeaderProps> = ({
   playPause,
   close,
   storyNameText = {},
-  headerStyle = {},
+  headerStyle,
 }) => {
   const headerViewContainer: StyleProp<ViewStyle> = React.useMemo(() => {
     const style: ViewStyle = {
@@ -55,16 +55,37 @@ const Header: React.FC<IHeaderProps> = ({
           )}
         </View>
       </View>
-      <View style={styles.progressBarContainer}>
+      <View
+        style={[
+          styles.progressBarContainer,
+          {
+            backgroundColor: headerStyle?.containerBackground || 'transparent',
+            height: headerStyle?.conatinerHeight || ('100%' as any),
+          },
+        ]}
+      >
         {stories.map((story: any, index: number) => (
-          <View key={story.id} style={styles.progressBarBackground}>
+          <View
+            key={story.id}
+            style={[
+              styles.progressBarBackground,
+              {
+                backgroundColor:
+                  headerStyle?.progressBarBackground || 'rgba(255,255,255,0.5)',
+                height: headerStyle?.progressBarHeight || 3,
+                borderRadius: headerStyle?.cornerRadius || 10,
+              },
+            ]}
+          >
             <Animated.View
               style={[
                 styles.progressBar,
                 {
                   width: getProgressBarWidth(index, currentStoryIndex),
+                  height: headerStyle?.progressBarHeight || 3,
+                  backgroundColor: headerStyle?.progressColor || 'red',
+                  borderRadius: headerStyle?.cornerRadius || 10,
                 },
-                headerStyle,
               ]}
             />
           </View>

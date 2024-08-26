@@ -53,11 +53,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  logo: {
-    width: 40,
-    height: 40,
-    resizeMode: 'contain',
-  },
   icon: {
     width: 20,
     height: 20,

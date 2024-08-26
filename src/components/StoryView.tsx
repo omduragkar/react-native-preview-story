@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Animated,
   Dimensions,
@@ -27,7 +27,14 @@ const StoryView: React.FC<IStoryViewProp> = ({
   close = true,
   playPause = true,
   storyNameText = {},
-  headerStyle = {},
+  headerStyle = {
+    cornerRadius: 10,
+    progressColor: 'orange',
+    progressBarHeight: 7,
+    progressBarBackground: 'white',
+  },
+  noPause = false,
+  noControls = false,
 }) => {
   const [currentStoryIndex, setCurrentStoryIndex] = useState(index || 0);
   const progressAnim = useRef(new Animated.Value(0)).current;
@@ -67,7 +74,11 @@ const StoryView: React.FC<IStoryViewProp> = ({
       onChangePosition && onChangePosition(0);
     }
   };
-
+  useEffect(() => {
+    return () => {
+      isCompletedRef.current = false;
+    };
+  }, []);
   const runProgressAnimation = () => {
     // this will run the animations at the top for the story
     progressAnim.setValue(pausedProgress.current); //set the value of the progress of the story
@@ -113,6 +124,7 @@ const StoryView: React.FC<IStoryViewProp> = ({
       setCurrentStoryIndex(index);
     }
   }, [index]);
+
   const handlePressIn = () => {
     //for pause if user holds the screen
     setIsPaused(true);
@@ -125,6 +137,7 @@ const StoryView: React.FC<IStoryViewProp> = ({
 
   const handleScreenTouch = (evt: GestureResponderEvent) => {
     //this function takes the width and decided where the click was pressed if left or right
+    if (noControls) return;
     const touchX = evt?.nativeEvent?.locationX;
     if (touchX < width / 2) {
       goToPreviousStory();
@@ -152,15 +165,27 @@ const StoryView: React.FC<IStoryViewProp> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStoryIndex, isPaused]);
 
+  const onLoadStart = useCallback(() => {
+    setIsPaused(true);
+  }, []);
+
+  const onLoadEnd = useCallback(() => {
+    setIsPaused(false);
+  }, []);
+
   return visible ? (
     <SafeAreaView style={styles.safeArea}>
       <Pressable
         onPress={handleScreenTouch}
-        onLongPress={handlePressIn}
-        onPressOut={handlePressOut}
+        {
+          /*this is for pause if user holds the screen*/
+          ...(noPause || noControls
+            ? {}
+            : { onPressIn: handlePressIn, onPressOut: handlePressOut })
+        }
         style={({ pressed }) => [
           {
-            opacity: pressed ? 0.9 : 1, //when clicked shows the user screen a little dimmed for feedback
+            opacity: pressed && !noControls ? 0.9 : 1, //when clicked shows the user screen a little dimmed for feedback
           },
           styles.container,
         ]}
@@ -191,8 +216,8 @@ const StoryView: React.FC<IStoryViewProp> = ({
                   pausePlay={pausePlay}
                   isPaused={isPaused}
                   onComplete={onComplete}
-                  close={close}
-                  playPause={playPause}
+                  close={!noControls ? close : false}
+                  playPause={!noControls ? playPause : false}
                   storyNameText={storyNameText}
                   headerStyle={headerStyle}
                 />
@@ -201,7 +226,12 @@ const StoryView: React.FC<IStoryViewProp> = ({
           </SafeAreaView>
           <View style={styles.imageContainer}>
             {currentStory?.type && (
-              <ContentView story={currentStory} imageStyle={imageStyle} />
+              <ContentView
+                story={currentStory}
+                imageStyle={imageStyle}
+                onLoadStart={onLoadStart}
+                onLoadEnd={onLoadEnd}
+              />
             )}
           </View>
         </View>
