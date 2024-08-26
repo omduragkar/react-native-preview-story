@@ -1,81 +1,51 @@
-import { Header, StoryView } from 'react-native-preview-story';
-import { SafeAreaView, Text, Button, View, StatusBar } from 'react-native';
+import { StoryView } from 'react-native-preview-story';
+import { Button, SafeAreaView, StatusBar } from 'react-native';
 import styles from '../../src/Styled';
+import React from 'react';
 
 export default function App() {
+  const [visible, setVisible] = React.useState(true);
   return (
     <SafeAreaView style={styles.flex1}>
       <StatusBar />
-      <StoryView
-        stories={[
-          {
-            type: 'component',
-            duration: 5,
-            url: 'https://picsum.photos/100/600',
-            id: 12,
-            storyId: 1,
-            isSeen: false,
-            component: (
-              <View>
-                <Text>Custom Component</Text>
-                <View>
-                  <Button
-                    title="Press Me"
-                    onPress={() => console.log('Button Pressed')}
-                  />
-                </View>
-              </View>
-            ),
-          },
-          {
-            type: 'image',
-            duration: 5,
-            url: 'https://picsum.photos/200/300',
-            id: 1,
-            storyId: 1,
-            isSeen: false,
-          },
-          {
-            type: 'image',
-            duration: 5,
-            url: 'https://picsum.photos/300/400',
-            id: 2,
-            storyId: 1,
-            isSeen: false,
-          },
-          {
-            type: 'image',
-            duration: 5,
-            url: 'https://picsum.photos/400/500',
-            id: 3,
-            storyId: 1,
-            isSeen: false,
-          },
-          {
-            type: 'component',
-            duration: 5,
-            url: 'https://picsum.photos/100/600',
-            id: 4,
-            storyId: 1,
-            isSeen: false,
-            component: (
-              <View>
-                <Text>Custom Component</Text>
-                <View>
-                  <Button
-                    title="Press Me"
-                    onPress={() => console.log('Button Pressed')}
-                  />
-                </View>
-              </View>
-            ),
-          },
-        ]}
-        visible
-        onComplete={() => console.log('onComplete')}
-        close={false}
-        renderHeaderComponent={(props) => <Header {...props} />}
-      />
+      {visible ? (
+        <StoryView
+          stories={[
+            {
+              url: 'https://media.giphy.com/media/3o7TKz9b4v8l5ZjGxi/giphy.gif',
+              type: 'image',
+              id: 3,
+              duration: 5,
+            },
+            {
+              url: 'https://media.giphy.com/media/3o7TKz9b4v8l5ZjGxi/giphy.gif',
+              type: 'image',
+              id: 4,
+              duration: 5,
+            },
+            {
+              url: 'https://media.giphy.com/media/3o7TKz9b4v8l5ZjGxi/giphy.gif',
+              type: 'image',
+              id: 5,
+              duration: 5,
+            },
+            {
+              type: 'component',
+              component: <Button title="Hello" onPress={() => {}} />,
+              id: 1,
+              duration: 5,
+            },
+          ]}
+          visible
+          onComplete={() => {
+            setVisible(false);
+            console.log('close');
+          }}
+          noControls
+        />
+      ) : (
+        <Button title="Show Story" onPress={() => setVisible(true)} />
+      )}
     </SafeAreaView>
   );
 }

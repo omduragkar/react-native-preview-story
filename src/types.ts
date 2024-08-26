@@ -4,9 +4,7 @@ export interface IStoryProp {
   id: number;
   url?: string;
   type: 'image' | 'component';
-  duration: number;
-  storyId: number;
-  isSeen: false;
+  duration?: number;
   component?: React.ReactNode;
 }
 interface IHeaderCommonProps {
@@ -16,15 +14,26 @@ interface IHeaderCommonProps {
   playPause?: boolean;
   storyNameText?: any;
   onComplete: () => void;
-  headerStyle?: any;
+  headerStyle?: {
+    progressColor?: string;
+    cornerRadius?: number;
+    progressBarBackground?: string;
+    containerBackground?: string;
+    progressBarHeight?: number;
+    conatinerHeight?: string | number;
+  };
 }
 export interface IStoryViewProp extends IHeaderCommonProps {
   visible?: boolean;
   imageStyle?: any;
   maxDuration?: number;
-  renderHeaderComponent?: (props: IHeaderProps) => Element;
+  renderHeaderComponent?: (
+    props: IHeaderProps
+  ) => React.ReactNode | Element | null | any;
   onChangePosition?: (position: number) => void;
   index?: number;
+  noPause?: boolean;
+  noControls?: boolean;
 }
 export interface IHeaderProps extends IHeaderCommonProps {
   currentStoryIndex: number;
@@ -38,5 +47,11 @@ export interface IHeaderProps extends IHeaderCommonProps {
 }
 export interface IContentViewProps {
   story: IStoryProp;
-  imageStyle: any;
+  imageStyle: {
+    height?: number;
+    width?: number;
+    scale?: number;
+  };
+  onLoadStart: () => void;
+  onLoadEnd: () => void;
 }
