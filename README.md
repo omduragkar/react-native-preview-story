@@ -130,7 +130,4 @@ MIT
 
 Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)
 
-```
 
-This README includes detailed information about the [`StoryView`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22%24mid%22%3A1%2C%22fsPath%22%3A%22%2FUsers%2Fom.duragkar%2FDesktop%2Frepos%2Frepo2%2Freact-native-preview-story%2FREADME.md%22%2C%22external%22%3A%22file%3A%2F%2F%2FUsers%2Fom.duragkar%2FDesktop%2Frepos%2Frepo2%2Freact-native-preview-story%2FREADME.md%22%2C%22path%22%3A%22%2FUsers%2Fom.duragkar%2FDesktop%2Frepos%2Frepo2%2Freact-native-preview-story%2FREADME.md%22%2C%22scheme%22%3A%22file%22%7D%2C%22pos%22%3A%7B%22line%22%3A185%2C%22character%22%3A7%7D%7D%5D%2C%224b54566e-834f-4df0-b0cd-00869a31cfb9%22%5D "Go to definition") component and an example app demonstrating its usage with a custom header component.
-```
