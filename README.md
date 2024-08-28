@@ -30,8 +30,8 @@ The [`StoryView`](https://github.com/omduragkar/react-native-preview-story.git) 
 
 #### Props
 
-- **visible** (`boolean`): Determines if the StoryView is visible. Default is `false`.
-- **stories** (`IStoryProp[]`): Array of story objects to be displayed.
+- **visible** (`boolean`): Determines if the StoryView is visible. (Mandatory)
+- **stories** (`IStoryProp[]`): Array of story objects to be displayed. (Mandatory)
 - **imageStyle** (`any`): Style for the story image.
 - **containerStyle** (`any`): Style for the container.
 - **onComplete** (`() => void`): Callback when all stories are viewed.

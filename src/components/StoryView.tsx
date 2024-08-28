@@ -17,7 +17,7 @@ const { width } = Dimensions.get('window');
 const StoryView: React.FC<IStoryViewProp> = ({
   onComplete,
   stories,
-  visible = false,
+  visible,
   imageStyle,
   maxDuration = 3,
   renderHeaderComponent = null,
@@ -51,6 +51,13 @@ const StoryView: React.FC<IStoryViewProp> = ({
     [currentStory, maxDuration]
   );
   const [wentBack, setWentBack] = useState(0);
+  let onClose = useCallback(() => {
+    if (isCompletedRef.current) {
+      isCompletedRef.current = false;
+      return;
+    }
+    onComplete();
+  }, [onComplete]);
 
   const goToNextStory = () => {
     if (currentStoryIndex < stories.length - 1) {
@@ -66,19 +73,12 @@ const StoryView: React.FC<IStoryViewProp> = ({
       });
     } else {
       setWentBack(0);
-      if (!isCompletedRef.current) {
-        isCompletedRef.current = true;
-        onComplete();
-      }
+      onClose();
       setCurrentStoryIndex(0);
       onChangePosition && onChangePosition(0);
     }
   };
-  useEffect(() => {
-    return () => {
-      isCompletedRef.current = false;
-    };
-  }, []);
+
   const runProgressAnimation = () => {
     // this will run the animations at the top for the story
     progressAnim.setValue(pausedProgress.current); //set the value of the progress of the story
@@ -165,14 +165,6 @@ const StoryView: React.FC<IStoryViewProp> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStoryIndex, isPaused]);
 
-  const onLoadStart = useCallback(() => {
-    setIsPaused(true);
-  }, []);
-
-  const onLoadEnd = useCallback(() => {
-    setIsPaused(false);
-  }, []);
-
   return visible ? (
     <SafeAreaView style={styles.safeArea}>
       <Pressable
@@ -181,7 +173,7 @@ const StoryView: React.FC<IStoryViewProp> = ({
           /*this is for pause if user holds the screen*/
           ...(noPause || noControls
             ? {}
-            : { onPressIn: handlePressIn, onPressOut: handlePressOut })
+            : { onLongPress: handlePressIn, onPressOut: handlePressOut })
         }
         style={({ pressed }) => [
           {
@@ -201,7 +193,7 @@ const StoryView: React.FC<IStoryViewProp> = ({
                   currentStoryIndex,
                   pausePlay,
                   isPaused,
-                  onComplete,
+                  onComplete: onClose,
                   close,
                   playPause,
                   storyNameText,
@@ -215,7 +207,7 @@ const StoryView: React.FC<IStoryViewProp> = ({
                   currentStoryIndex={currentStoryIndex}
                   pausePlay={pausePlay}
                   isPaused={isPaused}
-                  onComplete={onComplete}
+                  onComplete={onClose}
                   close={!noControls ? close : false}
                   playPause={!noControls ? playPause : false}
                   storyNameText={storyNameText}
@@ -226,12 +218,7 @@ const StoryView: React.FC<IStoryViewProp> = ({
           </SafeAreaView>
           <View style={styles.imageContainer}>
             {currentStory?.type && (
-              <ContentView
-                story={currentStory}
-                imageStyle={imageStyle}
-                onLoadStart={onLoadStart}
-                onLoadEnd={onLoadEnd}
-              />
+              <ContentView story={currentStory} imageStyle={imageStyle} />
             )}
           </View>
         </View>

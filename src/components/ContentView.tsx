@@ -3,12 +3,7 @@ import { Dimensions, Image } from 'react-native';
 import styles from '../Styled';
 import type { IContentViewProps } from '../types';
 const { width, height } = Dimensions.get('window');
-const ContentView: React.FC<IContentViewProps> = ({
-  story,
-  imageStyle,
-  onLoadStart,
-  onLoadEnd,
-}) => {
+const ContentView: React.FC<IContentViewProps> = ({ story, imageStyle }) => {
   switch (story.type) {
     case 'image':
       return (
@@ -19,8 +14,6 @@ const ContentView: React.FC<IContentViewProps> = ({
             width: imageStyle?.width || width,
             scale: imageStyle?.scale || 1,
           }}
-          onLoadStart={onLoadStart}
-          onLoadEnd={onLoadEnd}
           style={[styles.backgroundImage, imageStyle]}
         />
       );

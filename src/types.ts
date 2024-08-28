@@ -24,7 +24,7 @@ interface IHeaderCommonProps {
   };
 }
 export interface IStoryViewProp extends IHeaderCommonProps {
-  visible?: boolean;
+  visible: boolean;
   imageStyle?: any;
   maxDuration?: number;
   renderHeaderComponent?: (
@@ -52,6 +52,4 @@ export interface IContentViewProps {
     width?: number;
     scale?: number;
   };
-  onLoadStart: () => void;
-  onLoadEnd: () => void;
 }
