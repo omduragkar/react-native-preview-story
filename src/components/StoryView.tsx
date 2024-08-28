@@ -52,14 +52,14 @@ const StoryView: React.FC<IStoryViewProp> = ({
   );
   const [wentBack, setWentBack] = useState(0);
   let onClose = useCallback(() => {
-    if (isCompletedRef.current) {
-      isCompletedRef.current = false;
+    if (!isCompletedRef.current) {
+      isCompletedRef.current = true;
+      onComplete();
       return;
     }
-    onComplete();
   }, [onComplete]);
 
-  const goToNextStory = () => {
+  const goToNextStory = useCallback(() => {
     if (currentStoryIndex < stories.length - 1) {
       Animated.timing(progressAnim, {
         toValue: 1,
@@ -77,9 +77,9 @@ const StoryView: React.FC<IStoryViewProp> = ({
       setCurrentStoryIndex(0);
       onChangePosition && onChangePosition(0);
     }
-  };
+  }, [currentStoryIndex, stories, progressAnim, onChangePosition, onClose]);
 
-  const runProgressAnimation = () => {
+  const runProgressAnimation = useCallback(() => {
     // this will run the animations at the top for the story
     progressAnim.setValue(pausedProgress.current); //set the value of the progress of the story
     Animated.timing(progressAnim, {
@@ -91,7 +91,7 @@ const StoryView: React.FC<IStoryViewProp> = ({
         goToNextStory(); //once finished goes to nextStory()
       }
     });
-  };
+  }, [maxDurationPerStory, progressAnim, goToNextStory]);
   const getProgressBarWidth = (storyIndex: number, currentIndex: number) => {
     if (currentIndex > storyIndex) {
       return '100%';
@@ -162,8 +162,10 @@ const StoryView: React.FC<IStoryViewProp> = ({
         pausedProgress.current = value;
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentStoryIndex, isPaused]);
+    return () => {
+      progressAnim.stopAnimation();
+    };
+  }, [currentStoryIndex, isPaused, progressAnim, runProgressAnimation]);
 
   return visible ? (
     <SafeAreaView style={styles.safeArea}>
