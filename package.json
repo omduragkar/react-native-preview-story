@@ -52,14 +52,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/om-swiggy/react-native-preview-story.git"
+    "url": "git+https://github.com/omduragkar/react-native-preview-story.git"
   },
-  "author": "omDuragkar <om.duragkar@swiggy.in> (https://github.com/om-swiggy)",
+  "author": "om Duragkar <omaduragkar@gmail.com> (https://github.com/omduragkar)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/om-swiggy/react-native-preview-story/issues"
+    "url": "https://github.com/omduragkar/react-native-preview-story/issues"
   },
-  "homepage": "https://github.com/om-swiggy/react-native-preview-story#readme",
+  "homepage": "https://github.com/omduragkar/react-native-preview-story#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },

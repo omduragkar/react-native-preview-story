@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Animated,
+  BackHandler,
   Dimensions,
   Pressable,
   SafeAreaView,
@@ -35,6 +36,7 @@ const StoryView: React.FC<IStoryViewProp> = ({
   },
   noPause = false,
   noControls = false,
+  nativeDriver = false,
 }) => {
   const [currentStoryIndex, setCurrentStoryIndex] = useState(index || 0);
   const progressAnim = useRef(new Animated.Value(0)).current;
@@ -58,13 +60,29 @@ const StoryView: React.FC<IStoryViewProp> = ({
       return;
     }
   }, [onComplete]);
+  useEffect(() => {
+    const backAction = () => {
+      if (visible) {
+        onClose();
+        return true;
+      }
+      return false;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, [visible, onClose]);
 
   const goToNextStory = useCallback(() => {
     if (currentStoryIndex < stories.length - 1) {
       Animated.timing(progressAnim, {
         toValue: 1,
         duration: 3,
-        useNativeDriver: false,
+        useNativeDriver: nativeDriver,
       }).start(() => {
         pausedProgress.current = 0;
         setCurrentStoryIndex(currentStoryIndex + 1);
@@ -77,7 +95,14 @@ const StoryView: React.FC<IStoryViewProp> = ({
       setCurrentStoryIndex(0);
       onChangePosition && onChangePosition(0);
     }
-  }, [currentStoryIndex, stories, progressAnim, onChangePosition, onClose]);
+  }, [
+    currentStoryIndex,
+    stories,
+    progressAnim,
+    onChangePosition,
+    onClose,
+    nativeDriver,
+  ]);
 
   const runProgressAnimation = useCallback(() => {
     // this will run the animations at the top for the story
@@ -85,13 +110,13 @@ const StoryView: React.FC<IStoryViewProp> = ({
     Animated.timing(progressAnim, {
       toValue: 1,
       duration: (1 - pausedProgress.current) * maxDurationPerStory * 1000, //for how long each story currently 6 seconds
-      useNativeDriver: false,
+      useNativeDriver: nativeDriver,
     }).start(({ finished }) => {
       if (finished) {
         goToNextStory(); //once finished goes to nextStory()
       }
     });
-  }, [maxDurationPerStory, progressAnim, goToNextStory]);
+  }, [maxDurationPerStory, progressAnim, goToNextStory, nativeDriver]);
   const getProgressBarWidth = (storyIndex: number, currentIndex: number) => {
     if (currentIndex > storyIndex) {
       return '100%';

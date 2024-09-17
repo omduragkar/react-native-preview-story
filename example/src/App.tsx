@@ -1,6 +1,11 @@
 import { StoryView, type IStoryProp } from 'react-native-preview-story';
-import { Button, SafeAreaView, StatusBar } from 'react-native';
-import styles from '../../src/Styled';
+import {
+  Button,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
 import React, { useMemo } from 'react';
 
 export default function App() {
@@ -27,7 +32,17 @@ export default function App() {
       },
       {
         type: 'component',
-        component: <Button title="Hello" onPress={() => {}} />,
+        component: (
+          <View style={styles.component}>
+            <Button
+              title="Hello"
+              onPress={() => {
+                setVisible(false);
+                console.log('close');
+              }}
+            />
+          </View>
+        ),
         id: 1,
         duration: 5,
       },
@@ -53,3 +68,15 @@ export default function App() {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  flex1: {
+    flex: 1,
+  },
+  component: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 200,
+    width: 200,
+  },
+});

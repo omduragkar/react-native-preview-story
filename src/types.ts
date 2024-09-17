@@ -34,6 +34,7 @@ export interface IStoryViewProp extends IHeaderCommonProps {
   index?: number;
   noPause?: boolean;
   noControls?: boolean;
+  nativeDriver?: boolean;
 }
 export interface IHeaderProps extends IHeaderCommonProps {
   currentStoryIndex: number;
