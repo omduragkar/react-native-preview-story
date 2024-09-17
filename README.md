@@ -2,6 +2,13 @@
 
 A React Native component to display stories similar to Instagram and Snapchat.
 
+## Images
+
+| UI Mode                                         | Android                                                               | iOS                                                                    |
+| ----------------------------------------------- | --------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| <p align="center">**Android with Comp & Image** | <img align="center" src="./screenshots/android_comp.png" width="300"> | <img align="center" src="./screenshots/story_android.png" width="300"> |
+| <p align="center">**iOS with Comp & Image**     | <img align="center" src="./screenshots/ios_comp.png" width="300">     | <img align="center" src="./screenshots/story_ios.png" width="300">     |
+
 ## Installation
 
 ```sh
@@ -129,5 +136,3 @@ MIT
 ---
 
 Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)
-
-
