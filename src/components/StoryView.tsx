@@ -1,4 +1,12 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+  type ForwardRefRenderFunction,
+} from 'react';
 import {
   Animated,
   BackHandler,
@@ -9,35 +17,40 @@ import {
   type GestureResponderEvent,
 } from 'react-native';
 import styles from '../Styled';
-import type { IStoryViewProp } from '../types';
+import type { IStoryViewProp, IStoryViewRef } from '../types';
 import Header from './Header';
 import ContentView from './ContentView';
 
 const { width } = Dimensions.get('window');
 
-const StoryView: React.FC<IStoryViewProp> = ({
-  onComplete,
-  stories,
-  visible,
-  imageStyle,
-  maxDuration = 3,
-  renderHeaderComponent = null,
-  storyName = '',
-  onChangePosition,
-  index,
-  close = true,
-  playPause = true,
-  storyNameText = {},
-  headerStyle = {
-    cornerRadius: 10,
-    progressColor: 'orange',
-    progressBarHeight: 7,
-    progressBarBackground: 'white',
+const StoryView: ForwardRefRenderFunction<IStoryViewRef, IStoryViewProp> = (
+  {
+    onComplete,
+    stories,
+    visible,
+    imageStyle,
+    maxDuration = 3,
+    renderHeaderComponent = null,
+    storyName = '',
+    onChangePosition,
+    index,
+    close = true,
+    playPause = true,
+    storyNameText = {},
+    headerStyle = {
+      cornerRadius: 10,
+      progressColor: 'orange',
+      progressBarHeight: 7,
+      progressBarBackground: 'white',
+    },
+    noPause = false,
+    noControls = false,
+    nativeDriver = false,
+    onPressBack = () => null,
+    noLoop = false,
   },
-  noPause = false,
-  noControls = false,
-  nativeDriver = false,
-}) => {
+  ref
+) => {
   const [currentStoryIndex, setCurrentStoryIndex] = useState(index || 0);
   const progressAnim = useRef(new Animated.Value(0)).current;
   const pausedProgress = useRef(0);
@@ -60,23 +73,21 @@ const StoryView: React.FC<IStoryViewProp> = ({
       return;
     }
   }, [onComplete]);
+  const backAction = useCallback(() => {
+    if (visible) {
+      onPressBack();
+      return true;
+    }
+    return false;
+  }, [visible, onPressBack]);
   useEffect(() => {
-    const backAction = () => {
-      if (visible) {
-        onClose();
-        return true;
-      }
-      return false;
-    };
-
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       backAction
     );
 
     return () => backHandler.remove();
-  }, [visible, onClose]);
-
+  }, [backAction]);
   const goToNextStory = useCallback(() => {
     if (currentStoryIndex < stories.length - 1) {
       Animated.timing(progressAnim, {
@@ -92,8 +103,11 @@ const StoryView: React.FC<IStoryViewProp> = ({
     } else {
       setWentBack(0);
       onClose();
-      setCurrentStoryIndex(0);
-      onChangePosition && onChangePosition(0);
+      if (!noLoop) {
+        setCurrentStoryIndex(0);
+        onChangePosition && onChangePosition(0);
+      }
+      onChangePosition && onChangePosition(currentStoryIndex);
     }
   }, [
     currentStoryIndex,
@@ -102,7 +116,17 @@ const StoryView: React.FC<IStoryViewProp> = ({
     onChangePosition,
     onClose,
     nativeDriver,
+    noLoop,
   ]);
+  useImperativeHandle(ref, () => ({
+    setPause: (pause: boolean) => {
+      setIsPaused(pause);
+    },
+    setCurrentStoryIndex: (indexFromRef: number) => {
+      setCurrentStoryIndex(indexFromRef);
+    },
+    progressAnim,
+  }));
 
   const runProgressAnimation = useCallback(() => {
     // this will run the animations at the top for the story
@@ -254,4 +278,4 @@ const StoryView: React.FC<IStoryViewProp> = ({
   ) : null;
 };
 
-export default StoryView;
+export default forwardRef(StoryView);

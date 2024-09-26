@@ -23,6 +23,11 @@ interface IHeaderCommonProps {
     conatinerHeight?: string | number;
   };
 }
+export interface IStoryViewRef {
+  setPause: (pause: boolean) => void;
+  setCurrentStoryIndex: (indexFromRef: number) => void;
+  progressAnim: Animated.Value;
+}
 export interface IStoryViewProp extends IHeaderCommonProps {
   visible: boolean;
   imageStyle?: any;
@@ -35,6 +40,8 @@ export interface IStoryViewProp extends IHeaderCommonProps {
   noPause?: boolean;
   noControls?: boolean;
   nativeDriver?: boolean;
+  onPressBack?: () => void;
+  noLoop?: boolean;
 }
 export interface IHeaderProps extends IHeaderCommonProps {
   currentStoryIndex: number;

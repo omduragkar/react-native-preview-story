@@ -4,10 +4,10 @@ A React Native component to display stories similar to Instagram and Snapchat.
 
 ## Images
 
-| UI Mode                                         | Android                                                               | iOS                                                                    |
+| UI Mode                                         | Component                                                             | Images                                                                 |
 | ----------------------------------------------- | --------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| <p align="center">**Android with Comp & Image** | <img align="center" src="./screenshots/android_comp.png" width="300"> | <img align="center" src="./screenshots/story_android.png" width="300"> |
-| <p align="center">**iOS with Comp & Image**     | <img align="center" src="./screenshots/ios_comp.png" width="300">     | <img align="center" src="./screenshots/story_ios.png" width="300">     |
+| <p align="center">**Android** | <img align="center" src="./screenshots/android_comp.png" width="300"> | <img align="center" src="./screenshots/story_android.png" width="300"> |
+| <p align="center">**iOS**     | <img align="center" src="./screenshots/ios_comp.png" width="300">     | <img align="center" src="./screenshots/story_ios.png" width="300">     |
 
 ## Installation
 
@@ -48,6 +48,9 @@ The [`StoryView`](https://github.com/omduragkar/react-native-preview-story.git) 
 - **index** (`number`): Initial index of the story to be displayed.
 - **noPause** (`boolean`): If true, the story will not pause on touch.
 - **noControls** (`boolean`): If true, the default controls will not be displayed.
+- **noLoop** (`boolean`): If changed will stop at last story, the default is false.
+- **native Driver** (`boolean`): Upto you to change native driver use case or not, default false.
+- **onPressBack** (`()=>void`): backhandler Press back value 
 
 ## Example
 
